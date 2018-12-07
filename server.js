@@ -1,12 +1,16 @@
 var express = require("express");
-var exphbs = require("express-handlebars");
-const path = require("path");
 
-app.set("views", path.join(__dirname, "views"));
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
-app.set("view engine", "handlebars");
+var app = express();
 
-app.set("port", process.env.PORT || 3000);
-app.listen(app.get("port"), function() {
-  console.log("Server started on port" + app.get("port"));
+var PORT = process.env.PORT || 8080;
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.static(__dirname + "/public"));
+
+require("./routing/apiRoutes")(app);
+require("./routing/htmlRoutes")(app);
+
+app.listen(PORT, function() {
+  console.log("App listening on PORT: " + PORT);
 });
